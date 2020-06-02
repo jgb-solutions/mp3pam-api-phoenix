@@ -1,5 +1,5 @@
-defmodule Mp3pamWeb.ErrorView do
-  use Mp3pamWeb, :view
+defmodule MP3PamWeb.ErrorView do
+  use MP3PamWeb, :view
 
   # If you want to customize a particular status code
   # for a certain format, you may uncomment below.

@@ -1,7 +1,7 @@
 use Mix.Config
 
 # Configure your database
-config :mp3pam, Mp3pam.Repo,
+config :mp3pam, MP3Pam.Repo,
   username: "root",
   password: "asdf,,,",
   database: "mp3pam_phoenix",
@@ -15,7 +15,7 @@ config :mp3pam, Mp3pam.Repo,
 # The watchers configuration can be used to run external
 # watchers to your application. For example, we use it
 # with webpack to recompile .js and .css sources.
-config :mp3pam, Mp3pamWeb.Endpoint,
+config :mp3pam, MP3PamWeb.Endpoint,
   http: [port: 4000],
   debug_errors: true,
   code_reloader: true,
@@ -55,7 +55,7 @@ config :mp3pam, Mp3pamWeb.Endpoint,
 # different ports.
 
 # Watch static and templates for browser reloading.
-config :mp3pam, Mp3pamWeb.Endpoint,
+config :mp3pam, MP3PamWeb.Endpoint,
   live_reload: [
     patterns: [
       ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$",

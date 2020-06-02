@@ -1,4 +1,4 @@
-defmodule Mp3pam.Application do
+defmodule MP3Pam.Application do
   # See https://hexdocs.pm/elixir/Application.html
   # for more information on OTP Applications
   @moduledoc false
@@ -8,27 +8,27 @@ defmodule Mp3pam.Application do
   def start(_type, _args) do
     children = [
       # Start the Ecto repository
-      Mp3pam.Repo,
+      MP3Pam.Repo,
       # Start the Telemetry supervisor
-      Mp3pamWeb.Telemetry,
+      MP3PamWeb.Telemetry,
       # Start the PubSub system
-      {Phoenix.PubSub, name: Mp3pam.PubSub},
+      {Phoenix.PubSub, name: MP3Pam.PubSub},
       # Start the Endpoint (http/https)
-      Mp3pamWeb.Endpoint
-      # Start a worker by calling: Mp3pam.Worker.start_link(arg)
-      # {Mp3pam.Worker, arg}
+      MP3PamWeb.Endpoint
+      # Start a worker by calling: MP3Pam.Worker.start_link(arg)
+      # {MP3Pam.Worker, arg}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
-    opts = [strategy: :one_for_one, name: Mp3pam.Supervisor]
+    opts = [strategy: :one_for_one, name: MP3Pam.Supervisor]
     Supervisor.start_link(children, opts)
   end
 
   # Tell Phoenix to update the endpoint configuration
   # whenever the application is updated.
   def config_change(changed, _new, removed) do
-    Mp3pamWeb.Endpoint.config_change(changed, removed)
+    MP3PamWeb.Endpoint.config_change(changed, removed)
     :ok
   end
 end

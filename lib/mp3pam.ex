@@ -1,6 +1,6 @@
-defmodule Mp3pam do
+defmodule MP3Pam do
   @moduledoc """
-  Mp3pam keeps the contexts that define your domain
+  MP3Pam keeps the contexts that define your domain
   and business logic.
 
   Contexts are also responsible for managing your data, regardless

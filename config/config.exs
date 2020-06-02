@@ -8,14 +8,14 @@
 use Mix.Config
 
 config :mp3pam,
-  ecto_repos: [Mp3pam.Repo]
+  ecto_repos: [MP3Pam.Repo]
 
 # Configures the endpoint
-config :mp3pam, Mp3pamWeb.Endpoint,
+config :mp3pam, MP3PamWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "4ZEeAMNBIt7WkC3b58RCC7t7KKYHxZmUNhPnGYJ5zQSxfcwjpdgEf/itfuCPQS89",
-  render_errors: [view: Mp3pamWeb.ErrorView, accepts: ~w(html json), layout: false],
-  pubsub_server: Mp3pam.PubSub,
+  render_errors: [view: MP3PamWeb.ErrorView, accepts: ~w(html json), layout: false],
+  pubsub_server: MP3Pam.PubSub,
   live_view: [signing_salt: "iOCiRTlm"]
 
 # Configures Elixir's Logger

@@ -1,5 +1,5 @@
-defmodule Mp3pamWeb.PageLiveTest do
-  use Mp3pamWeb.ConnCase
+defmodule MP3PamWeb.PageLiveTest do
+  use MP3PamWeb.ConnCase
 
   import Phoenix.LiveViewTest
 

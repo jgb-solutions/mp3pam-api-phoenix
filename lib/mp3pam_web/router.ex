@@ -1,11 +1,11 @@
-defmodule Mp3pamWeb.Router do
-  use Mp3pamWeb, :router
+defmodule MP3PamWeb.Router do
+  use MP3PamWeb, :router
 
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
     plug :fetch_live_flash
-    plug :put_root_layout, {Mp3pamWeb.LayoutView, :root}
+    plug :put_root_layout, {MP3PamWeb.LayoutView, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
   end
@@ -14,16 +14,24 @@ defmodule Mp3pamWeb.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/", Mp3pamWeb do
+  scope "/", MP3PamWeb do
     pipe_through :browser
 
     live "/", PageLive, :index
   end
 
   # Other scopes may use custom stacks.
-  # scope "/api", Mp3pamWeb do
-  #   pipe_through :api
-  # end
+  scope "/", host: "api.mp3pam.ex" do
+    pipe_through :api
+
+    forward "/graphql", Absinthe.Plug, schema: MP3PamWeb.Schema
+
+    if Mix.env() == :dev do
+      forward "/playground", Absinthe.Plug.GraphiQL,
+        schema: MP3PamWeb.Schema,
+        interface: :playground
+    end
+  end
 
   # Enables LiveDashboard only for development
   #
@@ -37,7 +45,7 @@ defmodule Mp3pamWeb.Router do
 
     scope "/" do
       pipe_through :browser
-      live_dashboard "/dashboard", metrics: Mp3pamWeb.Telemetry
+      live_dashboard "/dashboard", metrics: MP3PamWeb.Telemetry
     end
   end
 end

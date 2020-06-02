@@ -1,4 +1,4 @@
-defmodule Mp3pamWeb.ConnCase do
+defmodule MP3PamWeb.ConnCase do
   @moduledoc """
   This module defines the test case to be used by
   tests that require setting up a connection.
@@ -11,7 +11,7 @@ defmodule Mp3pamWeb.ConnCase do
   we enable the SQL sandbox, so changes done to the database
   are reverted at the end of every test. If you are using
   PostgreSQL, you can even run database tests asynchronously
-  by setting `use Mp3pamWeb.ConnCase, async: true`, although
+  by setting `use MP3PamWeb.ConnCase, async: true`, although
   this option is not recommended for other databases.
   """
 
@@ -22,20 +22,20 @@ defmodule Mp3pamWeb.ConnCase do
       # Import conveniences for testing with connections
       import Plug.Conn
       import Phoenix.ConnTest
-      import Mp3pamWeb.ConnCase
+      import MP3PamWeb.ConnCase
 
-      alias Mp3pamWeb.Router.Helpers, as: Routes
+      alias MP3PamWeb.Router.Helpers, as: Routes
 
       # The default endpoint for testing
-      @endpoint Mp3pamWeb.Endpoint
+      @endpoint MP3PamWeb.Endpoint
     end
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Mp3pam.Repo)
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(MP3Pam.Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(Mp3pam.Repo, {:shared, self()})
+      Ecto.Adapters.SQL.Sandbox.mode(MP3Pam.Repo, {:shared, self()})
     end
 
     {:ok, conn: Phoenix.ConnTest.build_conn()}

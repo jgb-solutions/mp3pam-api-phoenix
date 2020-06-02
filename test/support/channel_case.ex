@@ -1,4 +1,4 @@
-defmodule Mp3pamWeb.ChannelCase do
+defmodule MP3PamWeb.ChannelCase do
   @moduledoc """
   This module defines the test case to be used by
   channel tests.
@@ -11,7 +11,7 @@ defmodule Mp3pamWeb.ChannelCase do
   we enable the SQL sandbox, so changes done to the database
   are reverted at the end of every test. If you are using
   PostgreSQL, you can even run database tests asynchronously
-  by setting `use Mp3pamWeb.ChannelCase, async: true`, although
+  by setting `use MP3PamWeb.ChannelCase, async: true`, although
   this option is not recommended for other databases.
   """
 
@@ -21,18 +21,18 @@ defmodule Mp3pamWeb.ChannelCase do
     quote do
       # Import conveniences for testing with channels
       import Phoenix.ChannelTest
-      import Mp3pamWeb.ChannelCase
+      import MP3PamWeb.ChannelCase
 
       # The default endpoint for testing
-      @endpoint Mp3pamWeb.Endpoint
+      @endpoint MP3PamWeb.Endpoint
     end
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Mp3pam.Repo)
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(MP3Pam.Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(Mp3pam.Repo, {:shared, self()})
+      Ecto.Adapters.SQL.Sandbox.mode(MP3Pam.Repo, {:shared, self()})
     end
 
     :ok

@@ -1,4 +1,4 @@
-defmodule Mp3pam.MixProject do
+defmodule MP3Pam.MixProject do
   use Mix.Project
 
   def project do
@@ -19,7 +19,7 @@ defmodule Mp3pam.MixProject do
   # Type `mix help compile.app` for more information.
   def application do
     [
-      mod: {Mp3pam.Application, []},
+      mod: {MP3Pam.Application, []},
       extra_applications: [:logger, :runtime_tools]
     ]
   end
@@ -37,7 +37,7 @@ defmodule Mp3pam.MixProject do
       {:phoenix_ecto, "~> 4.1"},
       {:ecto_sql, "~> 3.4"},
       {:myxql, ">= 0.0.0"},
-      {:phoenix_live_view, "~> 0.12.0"},
+      {:phoenix_live_view, "~> 0.13.0"},
       {:floki, ">= 0.0.0", only: :test},
       {:phoenix_html, "~> 2.11"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
@@ -50,7 +50,9 @@ defmodule Mp3pam.MixProject do
       {:guardian, "~> 2.0"},
       {:absinthe, "~> 1.5", override: true},
       {:absinthe_plug, "~> 1.5"},
-      {:absinthe_ecto, "~> 0.1.3"}
+      {:absinthe_ecto, "~> 0.1.3"},
+      {:ex_aws, "~> 2.1"},
+      {:bamboo, "~> 1.5"}
     ]
   end
 

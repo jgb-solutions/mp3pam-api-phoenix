@@ -1,4 +1,4 @@
-defmodule Mp3pamWeb.ErrorHelpers do
+defmodule MP3PamWeb.ErrorHelpers do
   @moduledoc """
   Conveniences for translating and building error messages.
   """
@@ -39,9 +39,9 @@ defmodule Mp3pamWeb.ErrorHelpers do
     # should be written to the errors.po file. The :count option is
     # set by Ecto and indicates we should also apply plural rules.
     if count = opts[:count] do
-      Gettext.dngettext(Mp3pamWeb.Gettext, "errors", msg, msg, count, opts)
+      Gettext.dngettext(MP3PamWeb.Gettext, "errors", msg, msg, count, opts)
     else
-      Gettext.dgettext(Mp3pamWeb.Gettext, "errors", msg, opts)
+      Gettext.dgettext(MP3PamWeb.Gettext, "errors", msg, opts)
     end
   end
 end

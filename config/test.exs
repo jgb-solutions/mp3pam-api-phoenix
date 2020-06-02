@@ -5,7 +5,7 @@ use Mix.Config
 # The MIX_TEST_PARTITION environment variable can be used
 # to provide built-in test partitioning in CI environment.
 # Run `mix help test` for more information.
-config :mp3pam, Mp3pam.Repo,
+config :mp3pam, MP3Pam.Repo,
   username: "root",
   password: "",
   database: "mp3pam_test#{System.get_env("MIX_TEST_PARTITION")}",
@@ -14,7 +14,7 @@ config :mp3pam, Mp3pam.Repo,
 
 # We don't run a server during test. If one is required,
 # you can enable the server option below.
-config :mp3pam, Mp3pamWeb.Endpoint,
+config :mp3pam, MP3PamWeb.Endpoint,
   http: [port: 4002],
   server: false
 

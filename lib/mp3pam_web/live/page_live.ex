@@ -1,5 +1,5 @@
-defmodule Mp3pamWeb.PageLive do
-  use Mp3pamWeb, :live_view
+defmodule MP3PamWeb.PageLive do
+  use MP3PamWeb, :live_view
 
   @impl true
   def mount(_params, _session, socket) do
@@ -26,7 +26,7 @@ defmodule Mp3pamWeb.PageLive do
   end
 
   defp search(query) do
-    if not Mp3pamWeb.Endpoint.config(:code_reloader) do
+    if not MP3PamWeb.Endpoint.config(:code_reloader) do
       raise "action disabled when not in development"
     end
 

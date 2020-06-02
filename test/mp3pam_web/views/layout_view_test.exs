@@ -1,5 +1,5 @@
-defmodule Mp3pamWeb.LayoutViewTest do
-  use Mp3pamWeb.ConnCase, async: true
+defmodule MP3PamWeb.LayoutViewTest do
+  use MP3PamWeb.ConnCase, async: true
 
   # When testing helpers, you may want to import Phoenix.HTML and
   # use functions such as safe_to_string() to convert the helper

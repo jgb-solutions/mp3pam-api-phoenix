@@ -1,3 +1,3 @@
-defmodule Mp3pamWeb.LayoutView do
-  use Mp3pamWeb, :view
+defmodule MP3PamWeb.LayoutView do
+  use MP3PamWeb, :view
 end

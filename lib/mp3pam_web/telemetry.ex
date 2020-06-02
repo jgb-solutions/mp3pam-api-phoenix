@@ -1,4 +1,4 @@
-defmodule Mp3pamWeb.Telemetry do
+defmodule MP3PamWeb.Telemetry do
   use Supervisor
   import Telemetry.Metrics
 
@@ -47,7 +47,7 @@ defmodule Mp3pamWeb.Telemetry do
     [
       # A module, function and arguments to be invoked periodically.
       # This function must call :telemetry.execute/3 and a metric must be added above.
-      # {Mp3pamWeb, :count_users, []}
+      # {MP3PamWeb, :count_users, []}
     ]
   end
 end

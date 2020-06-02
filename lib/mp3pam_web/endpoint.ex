@@ -1,4 +1,4 @@
-defmodule Mp3pamWeb.Endpoint do
+defmodule MP3PamWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :mp3pam
 
   # The session will be stored in the cookie and signed,
@@ -10,7 +10,7 @@ defmodule Mp3pamWeb.Endpoint do
     signing_salt: "8V988kTN"
   ]
 
-  socket "/socket", Mp3pamWeb.UserSocket,
+  socket "/socket", MP3PamWeb.UserSocket,
     websocket: true,
     longpoll: false
 
@@ -50,5 +50,5 @@ defmodule Mp3pamWeb.Endpoint do
   plug Plug.MethodOverride
   plug Plug.Head
   plug Plug.Session, @session_options
-  plug Mp3pamWeb.Router
+  plug MP3PamWeb.Router
 end

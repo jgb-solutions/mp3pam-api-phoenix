@@ -1,12 +1,12 @@
-defmodule Mp3pamWeb do
+defmodule MP3PamWeb do
   @moduledoc """
   The entrypoint for defining your web interface, such
   as controllers, views, channels and so on.
 
   This can be used in your application as:
 
-      use Mp3pamWeb, :controller
-      use Mp3pamWeb, :view
+      use MP3PamWeb, :controller
+      use MP3PamWeb, :view
 
   The definitions below will be executed for every view,
   controller, etc, so keep them short and clean, focused
@@ -19,11 +19,11 @@ defmodule Mp3pamWeb do
 
   def controller do
     quote do
-      use Phoenix.Controller, namespace: Mp3pamWeb
+      use Phoenix.Controller, namespace: MP3PamWeb
 
       import Plug.Conn
-      import Mp3pamWeb.Gettext
-      alias Mp3pamWeb.Router.Helpers, as: Routes
+      import MP3PamWeb.Gettext
+      alias MP3PamWeb.Router.Helpers, as: Routes
     end
   end
 
@@ -31,7 +31,7 @@ defmodule Mp3pamWeb do
     quote do
       use Phoenix.View,
         root: "lib/mp3pam_web/templates",
-        namespace: Mp3pamWeb
+        namespace: MP3PamWeb
 
       # Import convenience functions from controllers
       import Phoenix.Controller, only: [get_flash: 1, get_flash: 2, view_module: 1]
@@ -44,7 +44,7 @@ defmodule Mp3pamWeb do
   def live_view do
     quote do
       use Phoenix.LiveView,
-        layout: {Mp3pamWeb.LayoutView, "live.html"}
+        layout: {MP3PamWeb.LayoutView, "live.html"}
 
       unquote(view_helpers())
     end
@@ -71,7 +71,7 @@ defmodule Mp3pamWeb do
   def channel do
     quote do
       use Phoenix.Channel
-      import Mp3pamWeb.Gettext
+      import MP3PamWeb.Gettext
     end
   end
 
@@ -86,9 +86,9 @@ defmodule Mp3pamWeb do
       # Import basic rendering functionality (render, render_layout, etc)
       import Phoenix.View
 
-      import Mp3pamWeb.ErrorHelpers
-      import Mp3pamWeb.Gettext
-      alias Mp3pamWeb.Router.Helpers, as: Routes
+      import MP3PamWeb.ErrorHelpers
+      import MP3PamWeb.Gettext
+      alias MP3PamWeb.Router.Helpers, as: Routes
     end
   end
 
