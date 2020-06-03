@@ -1,0 +1,1 @@
+docker run --publish 4000:4000 --env COOL_TEXT='ELIXIR ROCKS!!!!' --env SECRET_KEY_BASE=Rcn1irdCzqk2HRiMt7apey+PYvYnq2mecWlnAIZ+55cmWKnTfjt1pwq5zHWcGpai --env APP_PORT=4000 --env DATABASE_URL=ecto://root:asdf,,,@localhost/mp3pam_phoenix --env GRAPHQL_HOST=docker.mp3pam.com jgbsolutions/mp3pam
