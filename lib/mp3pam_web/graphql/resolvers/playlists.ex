@@ -1,13 +1,13 @@
-defmodule MP3PamWeb.Resolvers.Track do
+defmodule MP3PamWeb.Resolvers.Playlist do
   alias MP3Pam.Repo
-  alias MP3Pam.Models.Track
+  alias MP3Pam.Models.Playlist
 
   def all(_args, _resolution) do
-    {:ok, Repo.all(Track)}
+    {:ok, Repo.all(Playlist)}
   end
 
   def find(_parent, args, _resolution) do
-    {:ok, Repo.get(Track, args.id)}
+    {:ok, Repo.get(Playlist, args.id)}
   end
 
   # create track context user // %{context: %{current_user: user}}
@@ -17,11 +17,11 @@ defmodule MP3PamWeb.Resolvers.Track do
     {:ok, "url"}
   end
 
-  def tracks_by_genre(args, _resolution) do
+  def random_playlists(args, _resolution) do
     {:ok, "track"}
   end
 
-  def related_tracks(args, _resolution) do
+  def related_playlists(args, _resolution) do
     {:ok, "track"}
   end
 

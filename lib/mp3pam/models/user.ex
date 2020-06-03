@@ -15,5 +15,6 @@ defmodule MP3Pam.Models.User do
     field :password_reset_code, :string
     field :first_login, :boolean, default: true
     field :img_bucket, :string
+    timestamps()
   end
 end

@@ -1,6 +1,9 @@
 defmodule MP3PamWeb.UserSocket do
   use Phoenix.Socket
 
+  use Absinthe.Phoenix.Socket,
+    schema: MP3PamWeb.Schema
+
   ## Channels
   # channel "room:*", MP3PamWeb.RoomChannel
 
@@ -16,8 +19,21 @@ defmodule MP3PamWeb.UserSocket do
   # See `Phoenix.Token` documentation for examples in
   # performing token verification on connect.
   @impl true
-  def connect(_params, socket, _connect_info) do
+  def connect(params, socket, _connect_info) do
+    current_user = current_user(params)
+
+    socket =
+      Absinthe.Phoenix.Socket.put_options(socket,
+        context: %{
+          current_user: current_user
+        }
+      )
+
     {:ok, socket}
+  end
+
+  defp current_user(%{"user_id" => id}) do
+    MP3Pam.Repo.get(User, id)
   end
 
   # Socket id's are topics that allow you to identify all sockets for a given user:

@@ -26,11 +26,12 @@ defmodule MP3PamWeb.Router do
 
     forward "/graphql", Absinthe.Plug, schema: MP3PamWeb.Schema
 
-    if Mix.env() == :dev do
-      forward "/playground", Absinthe.Plug.GraphiQL,
-        schema: MP3PamWeb.Schema,
-        interface: :playground
-    end
+    # if Mix.env() == :dev do
+    #   forward "/playground", Absinthe.Plug.GraphiQL,
+    #     schema: MP3PamWeb.Schema,
+    #     interface: :playground,
+    #     socket: MP3PamWeb.UserSocket
+    # end
   end
 
   # Enables LiveDashboard only for development

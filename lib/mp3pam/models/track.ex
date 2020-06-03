@@ -20,5 +20,6 @@ defmodule MP3Pam.Models.Track do
     field :download_count, :integer, default: 0
     field :publish, :boolean, default: true
     field :allow_download, :boolean, default: false
+    timestamps()
   end
 end

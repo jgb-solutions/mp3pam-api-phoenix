@@ -14,9 +14,10 @@ defmodule MP3Pam.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: MP3Pam.PubSub},
       # Start the Endpoint (http/https)
-      MP3PamWeb.Endpoint
+      MP3PamWeb.Endpoint,
       # Start a worker by calling: MP3Pam.Worker.start_link(arg)
       # {MP3Pam.Worker, arg}
+      {Absinthe.Subscription, MP3PamWeb.Endpoint}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

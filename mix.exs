@@ -49,10 +49,15 @@ defmodule MP3Pam.MixProject do
       {:plug_cowboy, "~> 2.0"},
       {:guardian, "~> 2.0"},
       {:absinthe, "~> 1.5", override: true},
+      {:absinthe_phoenix, "~> 2.0"},
       {:absinthe_plug, "~> 1.5"},
-      {:absinthe_ecto, "~> 0.1.3"},
       {:ex_aws, "~> 2.1"},
-      {:bamboo, "~> 1.5"}
+      {:ex_aws_s3, "~> 2.0"},
+      {:poison, "~> 3.0"},
+      {:hackney, "~> 1.9"},
+      {:bamboo, "~> 1.5"},
+      {:bcrypt_elixir, "~> 2.0"},
+      {:oban, "~> 1.2"}
     ]
   end
 
