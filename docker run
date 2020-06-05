@@ -1,1 +1,11 @@
-docker run --publish 4000:4000 --env COOL_TEXT='ELIXIR ROCKS!!!!' --env SECRET_KEY_BASE=Rcn1irdCzqk2HRiMt7apey+PYvYnq2mecWlnAIZ+55cmWKnTfjt1pwq5zHWcGpai --env APP_PORT=4000 --env DATABASE_URL=ecto://root:asdf,,,@localhost/mp3pam_phoenix --env GRAPHQL_HOST=docker.mp3pam.com jgbsolutions/mp3pam
+docker run --publish 4000:4000 -d --name="mp3pam" --env COOL_TEXT='ELIXIR ROCKS!!!!' --env SECRET_KEY_BASE=Rcn1irdCzqk2HRiMt7apey+PYvYnq2mecWlnAIZ+55cmWKnTfjt1pwq5zHWcGpai --env APP_PORT=4000 --env DATABASE_URL=ecto://root:asdf,,,@localhost/mp3pam_phoenix jgbsolutions/mp3pam
+
+docker run --publish 4000:4000 --name="mp3pam" --env COOL_TEXT='ELIXIR ROCKS!!!!' --env SECRET_KEY_BASE=Rcn1irdCzqk2HRiMt7apey+PYvYnq2mecWlnAIZ+55cmWKnTfjt1pwq5zHWcGpai --env APP_PORT=4000 --env DATABASE_URL=ecto://root:asdf,,,@localhost/mp3pam_phoenix jgbsolutions/mp3pam
+
+docker run --network host --name="mp3pam" --env COOL_TEXT='ELIXIR ROCKS!!!!' --env SECRET_KEY_BASE=Rcn1irdCzqk2HRiMt7apey+PYvYnq2mecWlnAIZ+55cmWKnTfjt1pwq5zHWcGpai --env APP_PORT=4000 --env DATABASE_URL=ecto://root:asdf,,,@localhost/mp3pam_phoenix jgbsolutions/mp3pam
+
+COOL_TEXT='ELIXIR ROCKS!!!!' SECRET_KEY_BASE=Rcn1irdCzqk2HRiMt7apey+PYvYnq2mecWlnAIZ+55cmWKnTfjt1pwq5zHWcGpai APP_PORT=4000 DATABASE_URL=ecto://root:asdf,,,@localhost/mp3pam_phoenix jgbsolutions/mp3pam
+
+docker run --network host --name="mp3pam" --rm --env SECRET_KEY_BASE=Rcn1irdCzqk2HRiMt7apey+PYvYnq2mecWlnAIZ+55cmWKnTfjt1pwq5zHWcGpai --env APP_PORT=4000 --env DATABASE_URL=ecto://phoenix:phoenix@localhost/phoenix -d jgbsolutions/mp3pam:0.0.3
+
+docker run --network host --name="mp3pam" --restart always --env SECRET_KEY_BASE=Rcn1irdCzqk2HRiMt7apey+PYvYnq2mecWlnAIZ+55cmWKnTfjt1pwq5zHWcGpai --env APP_PORT=4000 --env DATABASE_URL=ecto://phoenix:phoenix@localhost/phoenix -d jgbsolutions/mp3pam:0.0.3

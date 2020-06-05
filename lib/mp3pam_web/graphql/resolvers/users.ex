@@ -1,6 +1,6 @@
 defmodule MP3PamWeb.Resolvers.User do
-  alias MP3Pam.Models.User
   alias MP3Pam.Repo
+  alias MP3Pam.Models.User
 
   def all(_args, _resolution) do
     {:ok, Repo.all(User)}

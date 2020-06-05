@@ -2,10 +2,11 @@ use Mix.Config
 
 # Configure your database
 config :mp3pam, MP3Pam.Repo,
-  username: "root",
-  password: "asdf,,,",
-  database: "mp3pam_phoenix",
-  hostname: "localhost",
+  # username: "root",
+  # password: "asdf,,,",
+  # database: "mp3pam_phoenix",
+  # hostname: "localhost",
+  url: "ecto://root:asdf,,,@localhost/mp3pam_phoenix",
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
 

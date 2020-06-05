@@ -3,14 +3,14 @@ defmodule MP3Pam.Repo.Migrations.AddUsersTable do
 
   def change do
     create table("users") do
-      add :name, :string
-      add :email, :string
-      add :password, :string
+      add :name, :string, null: false
+      add :email, :string, size: 60, unique: true
+      add :password, :string, size: 60
       add :avatar, :string
       add :fb_avatar, :string
-      add :facebook_id, :string
+      add :facebook_id, :string, size: 16, unique: true
       add :facebook_link, :string
-      add :telephone, :string
+      add :telephone, :string, size: 20
       add :admin, :boolean, default: false
       add :active, :boolean, default: false
       add :password_reset_code, :string
@@ -20,19 +20,4 @@ defmodule MP3Pam.Repo.Migrations.AddUsersTable do
       timestamps()
     end
   end
-
-  #  def up do
-  #   create table("weather") do
-  #     add :city,    :string, size: 40
-  #     add :temp_lo, :integer
-  #     add :temp_hi, :integer
-  #     add :prcp,    :float
-
-  #     timestamps()
-  #   end
-  # end
-
-  # def down do
-  #   drop table("weather")
-  # end
 end

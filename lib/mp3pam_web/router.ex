@@ -21,8 +21,8 @@ defmodule MP3PamWeb.Router do
   end
 
   # Other scopes may use custom stacks.
-  graphql_host = Application.get_env(:mp3pam, :graphql_host, "api.mp3pam.ex")
-  scope "/", host: graphql_host do
+  # graphql_host = Application.get_env(:mp3pam, :graphql_host, "api.mp3pam.ex")
+  scope "/" do
     pipe_through :api
 
     forward "/graphql", Absinthe.Plug, schema: MP3PamWeb.Schema

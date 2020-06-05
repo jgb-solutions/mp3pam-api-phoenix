@@ -57,7 +57,9 @@ defmodule MP3Pam.MixProject do
       {:hackney, "~> 1.9"},
       {:bamboo, "~> 1.5"},
       {:bcrypt_elixir, "~> 2.0"},
-      {:oban, "~> 1.2"}
+      {:oban, "~> 1.2"},
+      {:faker, "~> 0.13", only: [:test, :dev]},
+      {:slugger, "~> 0.3.0"}
     ]
   end
 

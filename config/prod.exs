@@ -10,7 +10,8 @@ use Mix.Config
 # which you should run after static files are built and
 # before starting your production server.
 config :mp3pam, MP3PamWeb.Endpoint,
-  url: [host: "mp3pam.com", port: 80],
+  # url: [host: "mp3pam.com", port: 80],
+  check_origin: false,
   cache_static_manifest: "priv/static/cache_manifest.json",
   server: true
 

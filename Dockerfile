@@ -1,58 +1,50 @@
-# ---- Build Stage ----
-FROM erlang:21 AS app_builder
+FROM elixir:1.10.3-alpine AS build
 
-# Set environment variables for building the application
-ENV MIX_ENV=prod \
-    TEST=1 \
-    LANG=C.UTF-8
+# install build dependencies
+RUN apk add --no-cache build-base npm git python
 
-# Fetch the latest version of Elixir (once the 1.9 docker image is available you won't have to do this)
-RUN set -xe \
-  && ELIXIR_DOWNLOAD_URL="https://github.com/elixir-lang/elixir/archive/v1.9.0-rc.0.tar.gz" \
-  && ELIXIR_DOWNLOAD_SHA256="fa019ba18556f53bfb77840b0970afd116517764251704b55e419becb0b384cf" \
-  && curl -fSL -o elixir-src.tar.gz $ELIXIR_DOWNLOAD_URL \
-  && echo "$ELIXIR_DOWNLOAD_SHA256  elixir-src.tar.gz" | sha256sum -c - \
-  && mkdir -p /usr/local/src/elixir \
-  && tar -xzC /usr/local/src/elixir --strip-components=1 -f elixir-src.tar.gz \
-  && rm elixir-src.tar.gz \
-  && cd /usr/local/src/elixir \
-  && make install clean
+# prepare build dir
+WORKDIR /app
 
-# Install hex and rebar
+# install hex + rebar
 RUN mix local.hex --force && \
     mix local.rebar --force
 
-# Create the application build directory
-RUN mkdir /app
+# set build ENV
+ENV MIX_ENV=prod
+
+# install mix dependencies
+COPY mix.exs mix.lock ./
+COPY config config
+RUN mix do deps.get, deps.compile
+
+# build assets
+# COPY assets/package.json assets/package-lock.json ./assets/
+# RUN npm --prefix ./assets ci --progress=false --no-audit --loglevel=error
+
+COPY priv priv
+# COPY assets assets
+# RUN npm run --prefix ./assets deploy
+# RUN mix phx.digest
+
+# compile and build release
+COPY lib lib
+# uncomment COPY if rel/ exists
+# COPY rel rel
+RUN mix do compile, release
+
+# prepare release image
+FROM alpine:3.9 AS app
+RUN apk add --no-cache openssl ncurses-libs
+
 WORKDIR /app
 
-# Copy over all the necessary application files and directories
-COPY config ./config
-COPY lib ./lib
-COPY priv ./priv
-COPY mix.exs .
-COPY mix.lock .
+RUN chown nobody:nobody /app
 
-# Fetch the application dependencies and build the application
-RUN mix deps.get
-RUN mix deps.compile
-RUN mix phx.digest
-RUN mix release
+USER nobody:nobody
 
-#  ---- Application Stage ----
-FROM debian:stretch AS app
+COPY --from=build --chown=nobody:nobody /app/_build/prod/rel/mp3pam ./
 
-ENV LANG=C.UTF-8
+ENV HOME=/app
 
-# Install openssl
-RUN apt-get update && apt-get install -y openssl
-
-# Copy over the build artifact from the previous step and create a non root user
-RUN useradd --create-home app
-WORKDIR /home/app
-COPY --from=app_builder /app/_build .
-RUN chown -R app: ./prod
-USER app
-
-# Run the Phoenix app
-CMD ["./prod/rel/mp3pam/bin/mp3pam", "start"]
+CMD ["bin/mp3pam", "start"]
