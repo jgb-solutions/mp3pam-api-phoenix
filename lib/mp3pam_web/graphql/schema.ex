@@ -117,12 +117,13 @@ defmodule MP3PamWeb.Schema do
     end
 
     # Albums
-    field :albums, list_of(:album) do
+    field :albums, :paginate_album do
       arg(:page, :integer)
+      arg(:take, :integer)
       arg(:order_by, list_of(:order_by_input))
 
       # hasTracks
-      resolve(&MP3PamWeb.Resolvers.Album.all/2)
+      resolve(&MP3PamWeb.Resolvers.Album.paginate/2)
     end
 
     field :album, :album do

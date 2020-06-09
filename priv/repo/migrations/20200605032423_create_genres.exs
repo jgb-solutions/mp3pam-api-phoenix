@@ -3,8 +3,8 @@ defmodule MP3Pam.Repo.Migrations.CreateGenres do
 
   def change do
     create table(:genres) do
-      add :name, :string, null: false
-      add :slug, :string, null: false
+      add :name, :string, null: false, unique: true
+      add :slug, :string, null: false, unique: true
 
       timestamps()
     end

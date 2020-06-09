@@ -1,6 +1,6 @@
 defmodule MP3PamWeb.Schema.Types do
   use Absinthe.Schema.Notation
-
+	alias Absinthe.Blueprint.Schema
   # Object
   object :user do
     field :id, :id
@@ -29,12 +29,12 @@ defmodule MP3PamWeb.Schema.Types do
 	field :bio, :string
 	field :tracks, list_of(non_null(:track))
 	field :albums, list_of(non_null(:album))
-	field :user, list_of(:user)
+	field :user, :user
 	field :facebook_url, :string
 	field :twitter_url, :string
 	field :instagram_url, :string
 	field :youtube_url, :string
-	field :created_at, non_null(:naive_datetime)
+	field :inserted_at, non_null(:naive_datetime)
 	field :updated_at, non_null(:naive_datetime)
 end
 
@@ -44,11 +44,11 @@ object :album do
 	field :hash, non_null(:integer)
 	field :cover_url, non_null(:string)
 	field :detail, :string
-	field :user, list_of(:user)
+	field :user, :user
 	field :tracks, list_of(non_null(:track))
 	field :artist, non_null(:artist)
 	field :release_year, non_null(:integer)
-	field :created_at, non_null(:naive_datetime)
+	field :inserted_at, non_null(:naive_datetime)
 	field :updated_at, non_null(:naive_datetime)
 end
 
@@ -64,14 +64,14 @@ object :track do
 	field :genre, non_null(:genre)
 	field :artist, non_null(:artist)
 	field :album, :album
-	field :user, list_of(:user)
+	field :user, :user
 	field :playlists, list_of(non_null(:track))
 	field :number, :integer
 	field :allow_download, :boolean
 	field :play_count, non_null(:integer)
 	field :audio_file_size, non_null(:string)
 	field :download_count, non_null(:integer)
-	field :created_at, non_null(:naive_datetime)
+	field :inserted_at, non_null(:naive_datetime)
 	field :updated_at, non_null(:naive_datetime)
 end
 
@@ -80,9 +80,9 @@ object :playlist do
 	field :title, non_null(:string)
 	field :hash, non_null(:integer)
 	field :cover_url, :string
-	field :user, list_of(:user)
+	field :user, :user
 	field :tracks, list_of(non_null(:track))
-	field :created_at, non_null(:naive_datetime)
+	field :inserted_at, non_null(:naive_datetime)
 	field :updated_at, non_null(:naive_datetime)
 end
 
@@ -91,7 +91,7 @@ object :genre do
 	field :name, non_null(:string)
 	field :slug, non_null(:string)
 	field :tracks, list_of(non_null(:track))
-	field :created_at, non_null(:naive_datetime)
+	field :inserted_at, non_null(:naive_datetime)
 	field :updated_at, non_null(:naive_datetime)
 end
 
@@ -131,6 +131,48 @@ object :search_results do
 	field :tracks, list_of(non_null(:track))
 	field :artists, list_of(non_null(:artist))
 	field :albums, list_of(non_null(:album))
+end
+
+object :paginate do
+	field :pagination_info, :pagination_info
+end
+
+object :paginate_album do
+	import_fields :paginate
+	field :data, list_of(:album)
+end
+
+object :paginate_artist do
+	import_fields :paginate
+	field :data, list_of(:artist)
+end
+
+object :paginate_genre do
+	import_fields :paginate
+	field :data, list_of(:genre)
+end
+
+object :paginate_playlist do
+	import_fields :paginate
+	field :data, list_of(:playlist)
+end
+
+object :paginate_track do
+	import_fields :paginate
+	field :data, list_of(:track)
+end
+
+object :paginate_user do
+	import_fields :paginate
+	field :data, list_of(:user)
+end
+
+object :pagination_info do
+	field :current_page, :integer
+	field :per_page, :integer
+	field :total, :integer
+	field :total_pages, :integer
+	field :has_more_pages, :boolean
 end
 
 input_object :track_input do
@@ -239,7 +281,7 @@ object :delete_user_response do
 end
 
 object :facebook_login_payload do
-	field :data, list_of(:user)
+	field :data, :user
 	field :token, non_null(:string)
 end
 
@@ -283,4 +325,6 @@ end
     value(:asc, as: "ASC")
     value(:desc, as: "DESC")
   end
+
+	# enum :model, values: [:album, :artist, :track]
 end

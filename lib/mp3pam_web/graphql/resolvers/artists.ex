@@ -1,9 +1,13 @@
 defmodule MP3PamWeb.Resolvers.Artist do
   alias MP3Pam.Repo
+  import Ecto.Query
   alias MP3Pam.Models.Artist
 
   def all(_args, _resolution) do
-    {:ok, Repo.all(Artist)}
+    q = from a in Artist,
+      preload: [:tracks]
+
+    {:ok, Repo.all(q)}
   end
 
   def find(_parent, args, _resolution) do
