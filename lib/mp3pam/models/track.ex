@@ -23,15 +23,13 @@ defmodule MP3Pam.Models.Track do
     field :detail, :string
     field :lyrics, :string
     field :audio_file_size, :string, size: 10, null: false
-    # field :user_id, :integer, null: false
-    # field :artist_id, :integer, null: false
-    # field :album_id, :integer
-    # field :genre_id, :integer, null: false
     field :number, :integer
     field :play_count, :integer, default: 0
     field :download_count, :integer, default: 0
     field :publish, :boolean, default: true
     field :allow_download, :boolean, default: false
+    field :poster_url, :string, virtual: true
+    field :audio_url, :string, virtual: true
 
     timestamps()
 
@@ -80,10 +78,46 @@ defmodule MP3Pam.Models.Track do
   end
 
   def random do
-    query = from u in Track,
+    query = from Track,
     order_by: fragment("RAND()"),
     limit: 1
 
     Repo.one(query)
+  end
+
+  def make_poster_url(%__MODULE__{} = track) do
+    if track.poster do
+      "https://" <> track.img_bucket <> "/" <> track.poster
+    else
+      @default_poster_url
+    end
+  end
+
+  def with_poster_url(%__MODULE__{} = track) do
+    %{track | poster_url: make_poster_url(track)}
+  end
+
+  def make_audio_url(%__MODULE__{} = track) do
+    # return "https://" . $this->audio_bucket . '/' . $this->audio_name; if public
+    # $wasabi   = \Storage::disk('wasabi');
+
+    # $client   = $wasabi->getDriver()->getAdapter()->getClient();
+
+    # $command  = $client->getCommand('GetObject', [
+    #   'Bucket' => $this->audio_bucket,
+    #   'Key' => $this->audio_name,
+    #   'ResponseCacheControl' => 'max-age=86400',
+    # ]);
+
+    # $request = $client->createPresignedRequest($command, "+7 days");
+
+    # $url = (string) $request->getUri();
+
+    # return $url;
+    "https://audio.url/file.mp3"
+  end
+
+  def with_audio_url(%__MODULE__{} = track) do
+    %{track | audio_url: make_audio_url(track)}
   end
 end

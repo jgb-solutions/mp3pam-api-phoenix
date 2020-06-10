@@ -1,7 +1,8 @@
-defmodule MP3PamWeb.Schema do
+defmodule MP3PamWeb.GraphQL.Schema do
   use Absinthe.Schema
   import_types(Absinthe.Type.Custom)
-  import_types(MP3PamWeb.Schema.Types)
+  import_types(MP3PamWeb.GraphQL.Schema.Types)
+  # import MP3Pam.GraphQL.Macro
 
   query do
     # Protected Query
@@ -22,13 +23,15 @@ defmodule MP3PamWeb.Schema do
 
     # Tracks
     @desc "Get all tracks"
-    field :tracks, list_of(:track) do
+    field :tracks, :paginate_tracks do
       arg(:page, :integer)
+      arg(:take, :integer)
       arg(:order_by, list_of(:order_by_input))
-      resolve(&MP3PamWeb.Resolvers.Track.all/2)
+
+      resolve(&MP3PamWeb.Resolvers.Track.paginate/2)
     end
 
-    field :tracks_by_genre, list_of(:track) do
+    field :tracks_by_genre, :paginate_tracks do
       arg(:page, :integer)
       arg(:order_by, list_of(:order_by_input))
       arg(:slug, non_null(:string))
@@ -49,12 +52,13 @@ defmodule MP3PamWeb.Schema do
     end
 
     # Playlists
-    field :playlists, list_of(:playlist) do
+    field :playlists, :paginate_playlists do
       arg(:page, :integer)
+      arg(:take, :integer)
       arg(:order_by, list_of(:order_by_input))
 
       # hasTracks
-      resolve(&MP3PamWeb.Resolvers.Playlist.all/2)
+      resolve(&MP3PamWeb.Resolvers.Playlist.paginate/2)
     end
 
     field :playlist, :playlist do
@@ -62,17 +66,18 @@ defmodule MP3PamWeb.Schema do
       resolve(&MP3PamWeb.Resolvers.Playlist.find_by_hash/2)
     end
 
-    field :random_playlists, list_of(:playlist) do
+    field :random_playlists, :paginate_playlists do
       arg(:input, non_null(:random_playlists_input))
       resolve(&MP3PamWeb.Resolvers.Playlist.random_playlists/2)
     end
 
     # Users
-    field :users, list_of(:user) do
+    field :users, :paginate_users do
       arg(:page, :integer)
+      arg(:take, :integer)
       arg(:order_by, list_of(:order_by_input))
 
-      resolve(&MP3PamWeb.Resolvers.User.all/2)
+      resolve(&MP3PamWeb.Resolvers.User.paginate/2)
     end
 
     field :user, :user do
@@ -83,10 +88,6 @@ defmodule MP3PamWeb.Schema do
 
     # Genres
     field :genres, list_of(:genre) do
-      arg(:page, :integer)
-      arg(:order_by, list_of(:order_by_input))
-      # orderBy: [OrderByClause!] = [{ field: "name", order: ASC }] @orderBy
-
       resolve(&MP3PamWeb.Resolvers.Genre.all/2)
     end
 
@@ -97,11 +98,12 @@ defmodule MP3PamWeb.Schema do
     end
 
     # Artists
-    field :artists, list_of(:artist) do
+    field :artists, :paginate_artists do
       arg(:page, :integer)
+      arg(:take, :integer)
       arg(:order_by, list_of(:order_by_input))
 
-      resolve(&MP3PamWeb.Resolvers.Artist.all/2)
+      resolve(&MP3PamWeb.Resolvers.Artist.paginate/2)
     end
 
     field :artist, :artist do
@@ -110,14 +112,14 @@ defmodule MP3PamWeb.Schema do
       resolve(&MP3PamWeb.Resolvers.Artist.find_by_hash/2)
     end
 
-    field :random_artists, list_of(:artist) do
+    field :random_artists, :paginate_artists do
       arg(:input, non_null(:random_artists_input))
 
       resolve(&MP3PamWeb.Resolvers.Artist.random_artists/2)
     end
 
     # Albums
-    field :albums, :paginate_album do
+    field :albums, :paginate_albums do
       arg(:page, :integer)
       arg(:take, :integer)
       arg(:order_by, list_of(:order_by_input))
@@ -132,7 +134,7 @@ defmodule MP3PamWeb.Schema do
       resolve(&MP3PamWeb.Resolvers.Album.find_by_hash/2)
     end
 
-    field :random_albums, list_of(:album) do
+    field :random_albums, :paginate_albums do
       arg(:input, non_null(:random_albums_input))
 
       resolve(&MP3PamWeb.Resolvers.Album.random_albums/2)

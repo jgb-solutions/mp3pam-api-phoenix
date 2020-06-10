@@ -60,7 +60,8 @@ defmodule MP3Pam.MixProject do
       {:oban, "~> 1.2"},
       {:faker, "~> 0.13", only: [:test, :dev]},
       {:slugger, "~> 0.3.0"},
-      {:scrivener_ecto, "~> 2.0"}
+      {:scrivener_ecto, "~> 2.0"},
+      {:cors_plug, "~> 2.0"}
     ]
   end
 

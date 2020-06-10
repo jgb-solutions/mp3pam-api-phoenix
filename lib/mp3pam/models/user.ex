@@ -24,6 +24,7 @@ defmodule MP3Pam.Models.User do
     field :password_reset_code, :string
     field :first_login, :boolean, default: true
     field :img_bucket, :string
+    field :avatar_url, :string, virtual: true
 
     timestamps()
 
@@ -40,10 +41,22 @@ defmodule MP3Pam.Models.User do
   end
 
   def random do
-    query = from u in User,
+    q = from User,
     order_by: fragment("RAND()"),
     limit: 1
 
-    Repo.one(query)
+    Repo.one(q)
+  end
+
+  def make_avatar_url(%__MODULE__{} = user) do
+    if user.avatar do
+      "https://" <> user.img_bucket <> "/" <> user.avatar
+    else
+      @default_poster_url
+    end
+  end
+
+  def with_avatar_url(%__MODULE__{} = user) do
+    %{user | avatar_url: make_avatar_url(user)}
   end
 end

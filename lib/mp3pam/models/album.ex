@@ -6,10 +6,8 @@ defmodule MP3Pam.Models.Album do
 
   alias MP3Pam.Models.User
   alias MP3Pam.Models.Album
-  alias MP3Pam.Models.Genre
   alias MP3Pam.Models.Track
   alias MP3Pam.Models.Artist
-  alias MP3Pam.Models.Playlist
 
   @default_poster_url "https://img-storage-prod.mp3pam.com/placeholders/album-placeholder.jpg"
 
@@ -21,29 +19,30 @@ defmodule MP3Pam.Models.Album do
     field :release_year, :integer
     field :title, :string
     field :cover_url, :string, virtual: true
+
     timestamps()
 
-    belongs_to :artist, Artist
     has_many :track, Track
     belongs_to :user, User
+    belongs_to :artist, Artist
   end
 
   @doc false
   def changeset(album, attrs) do
     album
-    |> cast(attrs, [:title, :hash, :cover, :img_bucket, :detail, :user_id, :artist_id, :release_year])
-    |> validate_required([:title, :hash, :cover, :img_bucket, :detail, :user_id, :artist_id, :release_year])
+    |> cast(attrs, [:title, :hash, :cover, :img_bucket, :detail, :user_id, :artist, :release_year])
+    |> validate_required([:title, :hash, :cover, :img_bucket, :detail, :user_id, :artist, :release_year])
   end
 
   def random do
-    query = from u in Album,
+    query = from Album,
     order_by: fragment("RAND()"),
     limit: 1
 
     Repo.one(query)
   end
 
-  def make_cover_url(%Album{} = album) do
+  def make_cover_url(%__MODULE__{} = album) do
     if album.cover do
       "https://" <> album.img_bucket <> "/" <> album.cover
     else

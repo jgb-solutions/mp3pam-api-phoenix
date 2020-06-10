@@ -27,7 +27,7 @@ defmodule MP3Pam.Models.Genre do
   end
 
   def random do
-    query = from u in Genre,
+    query = from Genre,
     order_by: fragment("RAND()"),
     limit: 1
 

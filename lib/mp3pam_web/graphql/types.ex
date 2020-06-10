@@ -1,4 +1,4 @@
-defmodule MP3PamWeb.Schema.Types do
+defmodule MP3PamWeb.GraphQL.Schema.Types do
   use Absinthe.Schema.Notation
 	alias Absinthe.Blueprint.Schema
   # Object
@@ -16,6 +16,9 @@ defmodule MP3PamWeb.Schema.Types do
     field :first_login, :boolean
     field :img_bucket, :string
     field :tracks, list_of(:track)
+    field :albums, list_of(:album)
+    field :playlists, list_of(:playlist)
+    field :artists, list_of(:artist)
     field :inserted_at, :naive_datetime
     field :updated_at, :naive_datetime
   end
@@ -25,10 +28,11 @@ defmodule MP3PamWeb.Schema.Types do
 	field :name, non_null(:string)
 	field :stage_name, non_null(:string)
 	field :hash, non_null(:integer)
-	field :poster_url, non_null(:string)
+	# field :poster_url, non_null(:string) TODO
+	field :poster_url, :string
 	field :bio, :string
-	field :tracks, list_of(non_null(:track))
-	field :albums, list_of(non_null(:album))
+	field :tracks, :paginate_tracks
+	field :albums, :paginate_albums
 	field :user, :user
 	field :facebook_url, :string
 	field :twitter_url, :string
@@ -45,7 +49,7 @@ object :album do
 	field :cover_url, non_null(:string)
 	field :detail, :string
 	field :user, :user
-	field :tracks, list_of(non_null(:track))
+	field :tracks, list_of(:track)
 	field :artist, non_null(:artist)
 	field :release_year, non_null(:integer)
 	field :inserted_at, non_null(:naive_datetime)
@@ -65,7 +69,7 @@ object :track do
 	field :artist, non_null(:artist)
 	field :album, :album
 	field :user, :user
-	field :playlists, list_of(non_null(:track))
+	field :playlists, list_of(:playlist)
 	field :number, :integer
 	field :allow_download, :boolean
 	field :play_count, non_null(:integer)
@@ -81,7 +85,7 @@ object :playlist do
 	field :hash, non_null(:integer)
 	field :cover_url, :string
 	field :user, :user
-	field :tracks, list_of(non_null(:track))
+	field :tracks, list_of(:track)
 	field :inserted_at, non_null(:naive_datetime)
 	field :updated_at, non_null(:naive_datetime)
 end
@@ -90,7 +94,7 @@ object :genre do
 	field :id, :id
 	field :name, non_null(:string)
 	field :slug, non_null(:string)
-	field :tracks, list_of(non_null(:track))
+	field :tracks, :paginate_tracks
 	field :inserted_at, non_null(:naive_datetime)
 	field :updated_at, non_null(:naive_datetime)
 end
@@ -128,41 +132,36 @@ object :logout_response do
 end
 
 object :search_results do
-	field :tracks, list_of(non_null(:track))
-	field :artists, list_of(non_null(:artist))
-	field :albums, list_of(non_null(:album))
+	field :tracks, list_of(:track)
+	field :artists, list_of(:artist)
+	field :albums, list_of(:album)
 end
 
 object :paginate do
 	field :pagination_info, :pagination_info
 end
 
-object :paginate_album do
+object :paginate_albums do
 	import_fields :paginate
 	field :data, list_of(:album)
 end
 
-object :paginate_artist do
+object :paginate_artists do
 	import_fields :paginate
 	field :data, list_of(:artist)
 end
 
-object :paginate_genre do
-	import_fields :paginate
-	field :data, list_of(:genre)
-end
-
-object :paginate_playlist do
+object :paginate_playlists do
 	import_fields :paginate
 	field :data, list_of(:playlist)
 end
 
-object :paginate_track do
+object :paginate_tracks do
 	import_fields :paginate
 	field :data, list_of(:track)
 end
 
-object :paginate_user do
+object :paginate_users do
 	import_fields :paginate
 	field :data, list_of(:user)
 end
@@ -288,22 +287,22 @@ end
 
 input_object :related_tracks_input do
   field :hash, non_null(:string)
-  field :take, non_null(:string)
+  field :take, non_null(:integer)
 end
 
 input_object :random_artists_input do
   field :hash, non_null(:string)
-  field :take, non_null(:string)
+  field :take, non_null(:integer)
 end
 
 input_object :random_albums_input do
   field :hash, non_null(:string)
-  field :take, non_null(:string)
+  field :take, non_null(:integer)
 end
 
 input_object :random_playlists_input do
   field :hash, non_null(:string)
-  field :take, non_null(:string)
+  field :take, non_null(:integer)
 end
 
 input_object :download_input do
@@ -321,10 +320,10 @@ object :download do
 end
 
  # Enum
-  enum :sort_order do
-    value(:asc, as: "ASC")
-    value(:desc, as: "DESC")
-  end
+  # enum :sort_order do
+  #   value(:asc, as: "ASC")
+  #   value(:desc, as: "DESC")
+  # end
 
-	# enum :model, values: [:album, :artist, :track]
+	enum :sort_order, values: [:asc, :desc]
 end

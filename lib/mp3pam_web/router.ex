@@ -11,6 +11,7 @@ defmodule MP3PamWeb.Router do
   end
 
   pipeline :api do
+    plug CORSPlug, origin: "*"
     plug :accepts, ["json"]
   end
 
@@ -25,11 +26,11 @@ defmodule MP3PamWeb.Router do
   scope "/" do
     pipe_through :api
 
-    forward "/graphql", Absinthe.Plug, schema: MP3PamWeb.Schema
+    forward "/graphql", Absinthe.Plug, schema: MP3PamWeb.GraphQL.Schema
 
     # if Mix.env() == :dev do
     #   forward "/playground", Absinthe.Plug.GraphiQL,
-    #     schema: MP3PamWeb.Schema,
+    #     schema: MP3PamWeb.GraphQL.Schema,
     #     interface: :playground,
     #     socket: MP3PamWeb.UserSocket
     # end

@@ -1,9 +1,13 @@
 defmodule MP3PamWeb.Resolvers.Genre do
   alias MP3Pam.Repo
+  import Ecto.Query
   alias MP3Pam.Models.Genre
 
   def all(_args, _resolution) do
-    {:ok, Repo.all(Genre)}
+    q = from Genre,
+    order_by: [asc: :name]
+
+    {:ok, Repo.all(q)}
   end
 
   def find(_parent, args, _resolution) do

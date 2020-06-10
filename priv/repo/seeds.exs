@@ -159,7 +159,7 @@ if Mix.env() == :dev do
     Enum.each(1..50, fn _i ->
       Repo.insert!(%Album{
         title: Faker.Name.name(),
-        detail: Faker.Lorem.paragraph(200),
+        detail: Faker.Lorem.paragraph(5),
         cover: "albums/" <> Enum.random(album_covers),
         hash: Utils.getHash(Album),
         user_id: User.random().id,
@@ -178,8 +178,8 @@ if Mix.env() == :dev do
     Repo.insert!(%Track{
       title: Faker.Name.name(),
       hash: Utils.getHash(Track),
-      detail: Faker.Lorem.paragraph(1000),
-      lyrics: Faker.Lorem.paragraph(1000),
+      detail: Faker.Lorem.paragraph(5),
+      lyrics: Faker.Lorem.paragraph(5),
       audio_file_size: Integer.to_string(Enum.random(10000..99999)),
       audio_name: "demo/" <> Enum.random(audios),
       poster: "tracks/" <> Enum.random(track_posters),
