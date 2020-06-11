@@ -8,4 +8,4 @@ COOL_TEXT='ELIXIR ROCKS!!!!' SECRET_KEY_BASE=Rcn1irdCzqk2HRiMt7apey+PYvYnq2mecWl
 
 docker run --network host --name="mp3pam" --rm --env SECRET_KEY_BASE=Rcn1irdCzqk2HRiMt7apey+PYvYnq2mecWlnAIZ+55cmWKnTfjt1pwq5zHWcGpai --env APP_PORT=4000 --env DATABASE_URL=ecto://phoenix:phoenix@localhost/phoenix -d jgbsolutions/mp3pam:0.0.3
 
-docker run --network host --name="mp3pam" --restart always --env SECRET_KEY_BASE=Rcn1irdCzqk2HRiMt7apey+PYvYnq2mecWlnAIZ+55cmWKnTfjt1pwq5zHWcGpai --env APP_PORT=4000 --env DATABASE_URL=ecto://phoenix:phoenix@localhost/phoenix -d jgbsolutions/mp3pam:0.0.3
+docker run --network host --name="mp3pam" --restart always --env SECRET_KEY_BASE=Rcn1irdCzqk2HRiMt7apey+PYvYnq2mecWlnAIZ+55cmWKnTfjt1pwq5zHWcGpai --env APP_PORT=4000 --env DATABASE_URL=ecto://mp3pam_staging:mp3pam-staging@localhost/mp3pam_staging -d jgbsolutions/mp3pam:0.0.4

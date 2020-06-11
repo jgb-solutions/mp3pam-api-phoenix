@@ -135,7 +135,7 @@ IO.puts("Genres table seeded!")
 if Mix.env() == :dev do
   # Artists
   Repo.delete_all(Artist)
-  Enum.each(1..50, fn _i ->
+  Enum.each(1..100, fn _i ->
     username = Faker.Internet.user_name()
 
     Repo.insert!(%Artist{
@@ -156,7 +156,7 @@ if Mix.env() == :dev do
 
     # Albums
     Repo.delete_all(Album)
-    Enum.each(1..50, fn _i ->
+    Enum.each(1..100, fn _i ->
       Repo.insert!(%Album{
         title: Faker.Name.name(),
         detail: Faker.Lorem.paragraph(5),
@@ -174,7 +174,7 @@ if Mix.env() == :dev do
 
   # Track
   Repo.delete_all(Track)
-  Enum.each(1..50, fn _i ->
+  Enum.each(1..500, fn _i ->
     Repo.insert!(%Track{
       title: Faker.Name.name(),
       hash: Utils.getHash(Track),
@@ -199,7 +199,7 @@ if Mix.env() == :dev do
 
   # Playlists
   Repo.delete_all(Playlist)
-  Enum.each(1..50, fn _i ->
+  Enum.each(1..100, fn _i ->
     Repo.insert!(%Playlist{
       title: Faker.Name.name(),
       hash: Utils.getHash(Playlist),
@@ -214,7 +214,7 @@ if Mix.env() == :dev do
     Repo.delete_all("playlist_track")
     Repo.insert_all(
       "playlist_track",
-      Enum.map(1..300, fn _i ->
+      Enum.map(1..500, fn _i ->
         [
           track_id: Track.random().id,
           playlist_id: Playlist.random().id,

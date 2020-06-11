@@ -3,6 +3,7 @@ defmodule MP3PamWeb.Resolvers.Track do
   import Ecto.Query
   alias MP3Pam.RepoHelper
   alias MP3Pam.Models.Track
+  alias MP3Pam.Models.Genre
 
   def paginate(args, _resolution) do
     page =  args[:page] || 1
@@ -24,27 +25,12 @@ defmodule MP3PamWeb.Resolvers.Track do
     {:ok, paginated_tracks_with_poster_url}
   end
 
-  def find(_parent, args, _resolution) do
-    {:ok, Repo.get(Track, args.id)}
-  end
-
-  # create track context user // %{context: %{current_user: user}}
-
-  def upload_url(args, _resolution) do
-    # todo
-    {:ok, "url"}
-  end
-
-  def tracks_by_genre(args, _resolution) do
-    {:ok, "track"}
-  end
-
   def related_tracks(%{input: %{hash: hash, take: take}}, _resolution) do
     q = from t in Track,
+    preload: [:artist, :album],
     where: t.hash != ^hash,
-    order_by: fragment("RAND()"),
     limit: ^take,
-    preload: [:artist, :album]
+    order_by: fragment("RAND()")
 
     tracks_with_poster_url =
       Repo.all(q)
@@ -64,6 +50,35 @@ defmodule MP3PamWeb.Resolvers.Track do
           |> Track.with_poster_url
           |> Track.with_audio_url
         }
+      nil -> {:error, message: "Track Not Found", code: 404}
+    end
+  end
+
+  def tracks_by_genre(args, _resolution) do
+    %{
+      take: take,
+      slug: slug,
+      order_by: [%{field: field, order: order}]
+    } = args
+
+    page = args[:page] || 1
+
+    case Repo.get_by(Genre, slug: slug) do
+      %Genre{} = genre ->
+        q = from t in Track,
+          where: t.genre_id == ^genre.id,
+          preload: [:artist]
+          # order_by: [[^order_by.order]: ^order_by.field]
+
+        paginated_tracks = RepoHelper.paginate(q, page: page, page_size: take)
+
+        paginated_tracks_with_poster_url = Map.put(
+          paginated_tracks,
+          :data,
+          Enum.map(paginated_tracks.data, &(Track.with_poster_url(&1)))
+        )
+
+        {:ok, paginated_tracks_with_poster_url}
       nil -> {:error, message: "Track Not Found", code: 404}
     end
   end

@@ -33,6 +33,7 @@ defmodule MP3PamWeb.GraphQL.Schema do
 
     field :tracks_by_genre, :paginate_tracks do
       arg(:page, :integer)
+      arg(:take, :integer)
       arg(:order_by, list_of(:order_by_input))
       arg(:slug, non_null(:string))
 
