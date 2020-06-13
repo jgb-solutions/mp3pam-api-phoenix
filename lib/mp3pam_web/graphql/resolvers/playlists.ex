@@ -3,6 +3,7 @@ defmodule MP3PamWeb.Resolvers.Playlist do
   import Ecto.Query
   alias MP3Pam.RepoHelper
   alias MP3Pam.Models.Playlist
+  alias MP3Pam.Models.Track
 
   def paginate(args, _resolution) do
     page =  args[:page] || 1
@@ -28,26 +29,37 @@ defmodule MP3PamWeb.Resolvers.Playlist do
     {:ok, paginated_playlists_with_cover_url}
   end
 
-  def find(_parent, args, _resolution) do
-    {:ok, Repo.get(Playlist, args.id)}
-  end
-
-  # create track context user // %{context: %{current_user: user}}
-
-  def upload_url(args, _resolution) do
-    # todo
-    {:ok, "url"}
-  end
-
-  def random_playlists(args, _resolution) do
-    {:ok, "track"}
-  end
-
-  def related_playlists(args, _resolution) do
-    {:ok, "track"}
-  end
-
   def find_by_hash(args, _resolution) do
-    {:ok, "track"}
+    # Todo
+    %{
+      hash: hash,
+    } = args
+
+    q = from p in Playlist,
+    join: t in assoc(p, :tracks),
+    join: pt in "playlist_track", on: p.id == pt.playlist_id, on: t.id == pt.track_id,
+    preload: [:user, tracks: [:artist]],
+    order_by: [asc: pt.inserted_at],
+    limit: 1
+
+    case Repo.one(q, hash: hash) do
+      %Playlist{} = playlist ->
+        IO.inspect(playlist.tracks)
+
+        playlist_with_cover_url = playlist |> Playlist.with_cover_url
+
+        paginated_tracks_with_poster_url = Map.put(
+          playlist_with_cover_url,
+          :tracks,
+          Enum.map(playlist_with_cover_url.tracks, fn track ->
+            track
+            |> Track.with_poster_url
+            |> Track.with_audio_url
+          end)
+        )
+
+        {:ok, paginated_tracks_with_poster_url}
+      nil -> {:error, message: "Playlist Not Found", code: 404}
+    end
   end
 end
