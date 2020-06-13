@@ -1,1 +1,0 @@
-APP_PORT=4000 COOL_TEXT="Elixir Rocks" SECRET_KEY_BASE=$(mix phx.gen.secret) _build/prod/rel/mp3pam/bin/mp3pam start

@@ -6,27 +6,35 @@ defmodule MP3PamWeb.Resolvers.Track do
   alias MP3Pam.Models.Genre
   alias MP3Pam.Utils
   alias Size
+  alias MP3Pam.Cache
 
   def paginate(args, _resolution) do
     page = args[:page] || 1
     page_size = args[:take] || 20
 
-    q =
-      from RepoHelper.latest(Track),
-        preload: [:artist, :genre]
+    key = "tracks_page_" <> to_string(page)
 
-    paginated_tracks =
-      q
-      |> RepoHelper.paginate(page: page, page_size: page_size)
+    data =
+      Cache.get(key, fn ->
+        q =
+          from RepoHelper.latest(Track, :inserted_at),
+            preload: [:artist, :genre]
 
-    paginated_tracks_with_poster_url =
-      Map.put(
-        paginated_tracks,
-        :data,
-        Enum.map(paginated_tracks.data, &Track.with_poster_url(&1))
-      )
+        paginated_tracks =
+          q
+          |> RepoHelper.paginate(page: page, page_size: page_size)
 
-    {:ok, paginated_tracks_with_poster_url}
+        Map.put(
+          paginated_tracks,
+          :data,
+          Enum.map(
+            paginated_tracks.data,
+            &Track.with_poster_url(&1)
+          )
+        )
+      end)
+
+    {:ok, data}
   end
 
   def related_tracks(%{input: %{hash: hash, take: take}}, _resolution) do

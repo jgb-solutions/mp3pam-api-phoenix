@@ -17,7 +17,9 @@ defmodule MP3Pam.Application do
       MP3PamWeb.Endpoint,
       # Start a worker by calling: MP3Pam.Worker.start_link(arg)
       # {MP3Pam.Worker, arg}
-      {Absinthe.Subscription, MP3PamWeb.Endpoint}
+      {Absinthe.Subscription, MP3PamWeb.Endpoint},
+      # Cache
+      MP3Pam.Cache
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
