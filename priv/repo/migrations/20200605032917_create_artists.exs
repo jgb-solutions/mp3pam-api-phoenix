@@ -16,8 +16,9 @@ defmodule MP3Pam.Repo.Migrations.CreateArtists do
       add :youtube, :string
       add :verified, :boolean, default: false
 
-
       timestamps()
     end
+
+    create index(:artists, [:name, :stage_name, :hash])
   end
 end

@@ -9,5 +9,7 @@ defmodule MP3Pam.Repo.Migrations.CreatePlaylists do
 
       timestamps()
     end
+
+    create index(:playlists, [:title, :hash])
   end
 end

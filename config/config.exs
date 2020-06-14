@@ -26,6 +26,18 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
+config :ex_aws,
+  # System.get_env("AWS_ACCESS_KEY_ID"),
+  access_key_id: "AR6K1TTHKLAGMSA1J9OU",
+  # System.get_env("AWS_SECRET_ACCESS_KEY"),
+  secret_access_key: "2J6HqYidF7na9yklSpQBtz8bggtXToeFaDV1XnWZ",
+  s3: [
+    scheme: "https://",
+    host: "s3.us-west-1.wasabisys.com",
+    region: "us-west-1"
+    # bucket:
+  ]
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env()}.exs"

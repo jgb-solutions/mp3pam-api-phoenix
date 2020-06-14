@@ -22,7 +22,7 @@ defmodule MP3Pam.Models.Album do
 
     timestamps()
 
-    has_many :track, Track
+    has_many :tracks, Track
     belongs_to :user, User
     belongs_to :artist, Artist
   end
@@ -31,13 +31,23 @@ defmodule MP3Pam.Models.Album do
   def changeset(album, attrs) do
     album
     |> cast(attrs, [:title, :hash, :cover, :img_bucket, :detail, :user_id, :artist, :release_year])
-    |> validate_required([:title, :hash, :cover, :img_bucket, :detail, :user_id, :artist, :release_year])
+    |> validate_required([
+      :title,
+      :hash,
+      :cover,
+      :img_bucket,
+      :detail,
+      :user_id,
+      :artist,
+      :release_year
+    ])
   end
 
   def random do
-    query = from Album,
-    order_by: fragment("RAND()"),
-    limit: 1
+    query =
+      from Album,
+        order_by: fragment("RAND()"),
+        limit: 1
 
     Repo.one(query)
   end

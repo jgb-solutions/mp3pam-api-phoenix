@@ -8,5 +8,7 @@ defmodule MP3Pam.Repo.Migrations.CreateGenres do
 
       timestamps()
     end
+
+    create index(:genres, [:slug])
   end
 end

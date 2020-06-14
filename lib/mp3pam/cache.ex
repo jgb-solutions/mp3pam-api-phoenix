@@ -1,21 +1,30 @@
 defmodule MP3Pam.Cache do
   use GenServer
 
+  @table :mp3pam_cache
+
   def start_link(_opts) do
-    GenServer.start_link(__MODULE__, %{}, name: MP3PamCache)
+    GenServer.start_link(__MODULE__, %{}, name: __MODULE__)
   end
 
   def init(state) do
-    :ets.new(:mp3pam_cache, [:set, :public, :named_table])
+    :ets.new(@table, [
+      :set,
+      :public,
+      :named_table,
+      read_concurrency: true
+      # write_concurrency: true
+    ])
+
     {:ok, state}
   end
 
   def delete(key) do
-    GenServer.cast(MP3PamCache, {:delete, key})
+    GenServer.cast(__MODULE__, {:delete, key})
   end
 
   def get(key, default \\ nil) do
-    case GenServer.call(MP3PamCache, {:get, key}) do
+    case GenServer.call(__MODULE__, {:get, key}) do
       nil ->
         cond do
           is_function(default) ->
@@ -35,23 +44,23 @@ defmodule MP3Pam.Cache do
   end
 
   def put(key, data) do
-    GenServer.cast(MP3PamCache, {:put, key, data})
+    GenServer.cast(__MODULE__, {:put, key, data})
   end
 
   def handle_cast({:delete, key}, state) do
-    :ets.delete(:mp3pam_cache, key)
+    :ets.delete(@table, key)
     {:noreply, state}
   end
 
   def handle_cast({:put, key, data}, state) do
-    :ets.insert(:mp3pam_cache, {key, data})
+    :ets.insert(@table, {key, data})
 
     {:noreply, state}
   end
 
   def handle_call({:get, key}, _from, state) do
     reply =
-      case :ets.lookup(:mp3pam_cache, key) do
+      case :ets.lookup(@table, key) do
         [] -> nil
         [{_key, data}] -> data
       end

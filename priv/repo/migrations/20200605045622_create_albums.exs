@@ -15,6 +15,6 @@ defmodule MP3Pam.Repo.Migrations.CreateAlbums do
       timestamps()
     end
 
-    create index(:albums, [:title])
+    create index(:albums, [:title, :hash])
   end
 end

@@ -135,7 +135,7 @@ defmodule MP3PamWeb.GraphQL.Schema do
       resolve(&MP3PamWeb.Resolvers.Album.find_by_hash/2)
     end
 
-    field :random_albums, :paginate_albums do
+    field :random_albums, list_of(:album) do
       arg(:input, non_null(:random_albums_input))
 
       resolve(&MP3PamWeb.Resolvers.Album.random_albums/2)

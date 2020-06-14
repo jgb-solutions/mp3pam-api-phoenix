@@ -26,6 +26,6 @@ defmodule MP3Pam.Repo.Migrations.AddTracksTable do
       timestamps()
     end
 
-    create index(:tracks, [:title])
+    create index(:tracks, [:title, :hash])
   end
 end
