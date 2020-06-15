@@ -65,13 +65,16 @@ defmodule MP3Pam.Models.User do
     Repo.get!(__MODULE__, id)
   end
 
-  def store_token(%__MODULE__{} = user, token) do
-    user
-    |> put_change(:token, token)
-    |> Repo.update!()
+  def store_token(user, token) do
+    user =
+      user
+      |> put_change(:token, token)
+      |> Repo.update!()
+
+    {:ok, user}
   end
 
-  def revoke_token(%User{} = user, token) do
+  def revoke_token(user, token) do
     user
     |> store_token(token)
   end

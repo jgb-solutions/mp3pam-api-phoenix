@@ -40,9 +40,9 @@ defmodule MP3PamWeb.Resolvers.User do
   end
 
   def login(%{email: email, password: password}, _resolution) do
-    with {:ok, user} <- Auth.login_with_email_password(email, password),
+    with {:ok, %User{} = user} <- Auth.login(email, password),
          {:ok, jwt, _} <- MP3Pam.Guardian.encode_and_sign(user),
-         {:ok, _} <- MP3Pam.Models.store_token(user, jwt) do
+         {:ok, _} <- User.store_token(user, jwt) do
       {:ok, %{token: jwt}}
     end
   end
