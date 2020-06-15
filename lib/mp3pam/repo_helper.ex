@@ -4,7 +4,7 @@ defmodule MP3Pam.RepoHelper do
 
   def latest(query, column \\ :id) do
     from query,
-     order_by: [desc: ^column]
+      order_by: [desc: ^column]
   end
 
   def paginate(query, opts \\ []) do

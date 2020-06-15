@@ -7,6 +7,7 @@ defmodule MP3PamWeb.Resolvers.Utils do
   alias MP3Pam.Models.Track
   alias MP3Pam.Models.Artist
   alias MP3Pam.Models.Playlist
+  import MP3Pam.Helper
 
   def all(_parent, _args, _resolution) do
     {:ok, Repo.all(Track)}
@@ -15,8 +16,6 @@ defmodule MP3PamWeb.Resolvers.Utils do
   def find(_parent, args, _resolution) do
     {:ok, Repo.get(Track, args.id)}
   end
-
-  # create track context user // %{context: %{current_user: user}}
 
   def upload_url(args, _resolution) do
     %{
@@ -30,31 +29,19 @@ defmodule MP3PamWeb.Resolvers.Utils do
 
     filePath = make_upload_file_path(name)
 
-    # params = []
-
-    # params = [{"x-amz-acl", "public-read"} | params]
-
-    # params = [{"contentDisposition", "attachment; filename=" <> name} | params]
-
-    # IO.inspect(params)
-    # NOTE: Also set option `virtual_host: true` if using an EU region
+    query_params =
+      []
+      |> append_if(public, {"x-amz-acl", "public-read"})
+      |> append_if(attachment, {"Content-Disposition", "attachment; filename=" <> name})
 
     {:ok, url} =
-      ExAws.S3.presigned_url(
-        ExAws.Config.new(:s3),
+      ExAws.Config.new(:s3)
+      |> ExAws.S3.presigned_url(
         :put,
         bucket,
         filePath,
-        # {:content_disposition, "attachment; filename=" <> name},
-        # {:content_type, binary()},
-        # {:expires, binary()},
-        # {:acl, :public_read}
-        # expires_in: integer(),
-        # virtual_host: boolean(),
-        query_params: [
-          # {"x-amz-acl", "public-read"},
-          # {"Content-Disposition", "attachment; filename=" <> name}
-        ]
+        expires_in: 10 * 60 * 60,
+        query_params: query_params
       )
 
     {:ok,
@@ -65,9 +52,8 @@ defmodule MP3PamWeb.Resolvers.Utils do
   end
 
   defp make_upload_folder() do
-    # TODO
     user = %{id: 1}
-    # user = auth()->guard("api")->user();
+
     %{
       year: year,
       month: month,

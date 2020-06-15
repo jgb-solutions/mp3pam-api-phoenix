@@ -78,9 +78,10 @@ defmodule MP3Pam.Models.Track do
   end
 
   def random do
-    query = from Track,
-    order_by: fragment("RAND()"),
-    limit: 1
+    query =
+      from Track,
+        order_by: fragment("RAND()"),
+        limit: 1
 
     Repo.one(query)
   end
@@ -98,23 +99,19 @@ defmodule MP3Pam.Models.Track do
   end
 
   def make_audio_url(%__MODULE__{} = track) do
-    # return "https://" . $this->audio_bucket . '/' . $this->audio_name; if public
-    # $wasabi   = \Storage::disk('wasabi');
+    {:ok, url} =
+      ExAws.Config.new(:s3)
+      |> ExAws.S3.presigned_url(
+        :get,
+        track.audio_bucket,
+        track.audio_name,
+        expires_in: 7 * 24 * 60 * 60,
+        query_params: [
+          cache_control: "max-age=86400"
+        ]
+      )
 
-    # $client   = $wasabi->getDriver()->getAdapter()->getClient();
-
-    # $command  = $client->getCommand('GetObject', [
-    #   'Bucket' => $this->audio_bucket,
-    #   'Key' => $this->audio_name,
-    #   'ResponseCacheControl' => 'max-age=86400',
-    # ]);
-
-    # $request = $client->createPresignedRequest($command, "+7 days");
-
-    # $url = (string) $request->getUri();
-
-    # return $url;
-    "https://audio.url/file.mp3"
+    url
   end
 
   def with_audio_url(%__MODULE__{} = track) do
