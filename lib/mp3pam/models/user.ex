@@ -25,6 +25,7 @@ defmodule MP3Pam.Models.User do
     field :first_login, :boolean, default: true
     field :img_bucket, :string
     field :avatar_url, :string, virtual: true
+    field :token, :string
 
     timestamps()
 
@@ -34,16 +35,52 @@ defmodule MP3Pam.Models.User do
     has_many :playlists, Playlist
   end
 
-  def changeset(playlist, attrs) do
-    playlist
-    |> cast(attrs, [:title, :hash, :user_id])
-    |> validate_required([:title, :hash, :user_id])
+  def changeset(%__MODULE__{} = user, attrs) do
+    user
+    |> cast(attrs, [:name, :email, :password, :telephone])
+    |> validate_required([:name, :email, :password])
+    |> unsafe_validate_unique(:email, Repo)
+    # |> validate_length(:name, min: 3, max: 10)
+    # |> validate_length(:password, min: 5, max: 20)
+    |> hash_password()
+  end
+
+  defp hash_password(changeset) do
+    case changeset do
+      %Ecto.Changeset{valid?: true, changes: %{password: password}} ->
+        put_change(changeset, :password, Bcrypt.hash_pwd_salt(password))
+
+      _ ->
+        changeset
+    end
+  end
+
+  def create_user(attrs \\ %{}) do
+    %__MODULE__{}
+    |> changeset(attrs)
+    |> Repo.insert!()
+  end
+
+  def get_user!(id) do
+    Repo.get!(__MODULE__, id)
+  end
+
+  def store_token(%__MODULE__{} = user, token) do
+    user
+    |> put_change(:token, token)
+    |> Repo.update!()
+  end
+
+  def revoke_token(%User{} = user, token) do
+    user
+    |> store_token(token)
   end
 
   def random do
-    q = from User,
-    order_by: fragment("RAND()"),
-    limit: 1
+    q =
+      from User,
+        order_by: fragment("RAND()"),
+        limit: 1
 
     Repo.one(q)
   end

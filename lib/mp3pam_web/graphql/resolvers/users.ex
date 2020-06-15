@@ -3,23 +3,26 @@ defmodule MP3PamWeb.Resolvers.User do
   import Ecto.Query
   alias MP3Pam.RepoHelper
   alias MP3Pam.Models.User
+  alias MP3PamWeb.Resolvers.Auth
 
   def paginate(args, _resolution) do
-    page =  args[:page] || 1
+    page = args[:page] || 1
     page_size = args[:take] || 20
 
-    q = from RepoHelper.latest(User),
-      preload: [:artists, :albums, :playlists, :tracks]
+    q =
+      from RepoHelper.latest(User),
+        preload: [:artists, :albums, :playlists, :tracks]
 
     paginated_users =
       q
       |> RepoHelper.paginate(page: page, page_size: page_size)
 
-    paginated_users_with_avatar_url = Map.put(
-      paginated_users,
-      :data,
-      Enum.map(paginated_users.data, &(User.with_avatar_url(&1)))
-    )
+    paginated_users_with_avatar_url =
+      Map.put(
+        paginated_users,
+        :data,
+        Enum.map(paginated_users.data, &User.with_avatar_url(&1))
+      )
 
     {:ok, paginated_users_with_avatar_url}
   end
@@ -29,17 +32,18 @@ defmodule MP3PamWeb.Resolvers.User do
   end
 
   def create_user(args, _resolution) do
-    user = %User{
-      name: args.name,
-      email: args.email,
-      password: args.password,
-      telephone: args.telephone
-    }
-
-    {:ok, Repo.insert!(user)}
+    {:ok, User.create_user(args)}
   end
 
   def me(_, %{context: %{current_user: user}}) do
     {:ok, user}
+  end
+
+  def login(%{email: email, password: password}, _resolution) do
+    with {:ok, user} <- Auth.login_with_email_password(email, password),
+         {:ok, jwt, _} <- MP3Pam.Guardian.encode_and_sign(user),
+         {:ok, _} <- MP3Pam.Models.store_token(user, jwt) do
+      {:ok, %{token: jwt}}
+    end
   end
 end

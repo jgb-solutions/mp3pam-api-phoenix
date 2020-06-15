@@ -38,6 +38,16 @@ config :ex_aws,
     # bucket:
   ]
 
+config :mp3pam, MP3Pam.Guardian,
+  allowed_algos: ["HS512"],
+  verify_module: Guardian.Token,
+  issuer: "MP3Pam",
+  ttl: {365, :days},
+  allowed_drift: 2000,
+  verify_issuer: true,
+  secret_key: %{"k" => "eczKW9KcN_E3fAU7FEqgNw", "kty" => "oct"},
+  serializer: MP3Pam.Guardian
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env()}.exs"

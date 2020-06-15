@@ -16,6 +16,7 @@ defmodule MP3Pam.Repo.Migrations.AddUsersTable do
       add :password_reset_code, :string
       add :first_login, :boolean, default: true
       add :img_bucket, :string
+      add :token, :text
 
       timestamps()
     end

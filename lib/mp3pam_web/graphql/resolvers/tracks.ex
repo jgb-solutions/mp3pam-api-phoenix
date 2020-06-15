@@ -105,4 +105,12 @@ defmodule MP3PamWeb.Resolvers.Track do
         {:error, message: "Track Not Found", code: 404}
     end
   end
+
+  def add_track(args, %{context: %{current_user: current_user}}) do
+    {:ok, "Track added"}
+  end
+
+  def create(_args, _info) do
+    {:error, "Not Authorized"}
+  end
 end

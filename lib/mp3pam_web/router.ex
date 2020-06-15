@@ -15,6 +15,10 @@ defmodule MP3PamWeb.Router do
     plug :accepts, ["json"]
   end
 
+  pipeline :graphql do
+    plug MP3Pam.Context
+  end
+
   scope "/", MP3PamWeb do
     pipe_through :browser
 
@@ -23,10 +27,11 @@ defmodule MP3PamWeb.Router do
 
   # Other scopes may use custom stacks.
   # graphql_host = Application.get_env(:mp3pam, :graphql_host, "api.mp3pam.ex")
-  scope "/api" do
+  scope "/api/graphql" do
     pipe_through :api
+    pipe_through :graphql
 
-    forward "/graphql", Absinthe.Plug, schema: MP3PamWeb.GraphQL.Schema
+    forward "/", Absinthe.Plug, schema: MP3PamWeb.GraphQL.Schema
 
     # if Mix.env() == :dev do
     #   forward "/playground", Absinthe.Plug.GraphiQL,
