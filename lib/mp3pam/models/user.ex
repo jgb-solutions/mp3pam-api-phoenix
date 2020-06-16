@@ -55,7 +55,7 @@ defmodule MP3Pam.Models.User do
     end
   end
 
-  def create_user(attrs \\ %{}) do
+  def register(attrs \\ %{}) do
     %__MODULE__{}
     |> changeset(attrs)
     |> Repo.insert!()
@@ -68,7 +68,7 @@ defmodule MP3Pam.Models.User do
   def store_token(user, token) do
     user =
       user
-      |> put_change(:token, token)
+      |> change(%{token: token})
       |> Repo.update!()
 
     {:ok, user}
@@ -92,7 +92,7 @@ defmodule MP3Pam.Models.User do
     if user.avatar do
       "https://" <> user.img_bucket <> "/" <> user.avatar
     else
-      @default_poster_url
+      user.fb_avatar
     end
   end
 

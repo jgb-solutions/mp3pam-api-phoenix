@@ -17,15 +17,21 @@ defmodule MP3PamWeb.Resolvers.Utils do
     {:ok, Repo.get(Track, args.id)}
   end
 
-  def upload_url(args, _resolution) do
-    %{
-      input: %{
-        name: name,
-        bucket: bucket,
-        public: public,
-        attachment: attachment
-      }
-    } = args
+  def upload_url(
+        %{
+          input: %{
+            name: name,
+            bucket: bucket
+          }
+        } = args,
+        %{
+          context: %{
+            current_user: _current_user
+          }
+        }
+      ) do
+    public = args[:public] || false
+    attachment = args[:attachment] || false
 
     filePath = make_upload_file_path(name)
 

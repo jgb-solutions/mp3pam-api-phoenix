@@ -6,15 +6,11 @@ defmodule MP3PamWeb.GraphQL.Schema.Types do
     field :id, :id
     field :name, :string
     field :email, :string
-    field :avatar, :string
-    field :fb_avatar, :string
-    field :facebook_id, :string
-    field :facebook_link, :string
+    field :avatar_url, :string
     field :telephone, :string
     field :admin, :boolean
     field :active, :boolean
     field :first_login, :boolean
-    field :img_bucket, :string
     field :tracks, list_of(:track)
     field :albums, list_of(:album)
     field :playlists, list_of(:playlist)

@@ -3,13 +3,14 @@ defmodule MP3Pam.Guardian do
   alias MP3Pam.Models.User
 
   def subject_for_token(%User{} = user, _claims) do
-    sub = to_string(user.id)
-    {:ok, sub}
+    {:ok, to_string(user.id)}
   end
 
-  def resource_from_claims(claims) do
-    user = claims["sub"] |> User.get_user!()
+  def resource_from_claims(%{"sub" => id}) do
+    user = User.get_user!(id)
 
     {:ok, user}
+  rescue
+    Ecto.NoResultsError -> {:error, :"dUser not foun", code: 404}
   end
 end

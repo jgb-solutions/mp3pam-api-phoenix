@@ -31,10 +31,6 @@ defmodule MP3PamWeb.Resolvers.User do
     {:ok, Repo.get(User, args.id)}
   end
 
-  def create_user(args, _resolution) do
-    {:ok, User.create_user(args)}
-  end
-
   def me(_, %{context: %{current_user: user}}) do
     {:ok, user}
   end

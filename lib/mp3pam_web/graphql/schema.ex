@@ -162,13 +162,13 @@ defmodule MP3PamWeb.GraphQL.Schema do
   mutation do
     # Protected Mutations
     @desc "Create a user"
-    field :create_user, type: :user do
+    field :register, type: :user do
       arg(:name, non_null(:string))
       arg(:email, non_null(:string))
       arg(:password, non_null(:string))
       arg(:telephone, :string)
 
-      resolve(&MP3PamWeb.Resolvers.User.create_user/2)
+      resolve(&MP3PamWeb.Resolvers.Auth.register/2)
     end
 
     # Auth
