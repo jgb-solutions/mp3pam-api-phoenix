@@ -51,8 +51,6 @@ defmodule MP3PamWeb.Resolvers.Playlist do
 
     case Repo.one(q) do
       %Playlist{} = playlist ->
-        IO.inspect(playlist.tracks)
-
         playlist_with_cover_url = playlist |> Playlist.with_cover_url()
 
         paginated_tracks_with_poster_url =

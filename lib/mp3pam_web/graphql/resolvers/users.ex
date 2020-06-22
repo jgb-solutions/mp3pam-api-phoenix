@@ -3,6 +3,7 @@ defmodule MP3PamWeb.Resolvers.User do
   import Ecto.Query
   alias MP3Pam.RepoHelper
   alias MP3Pam.Models.User
+  alias MP3Pam.Models.Artist
   alias MP3PamWeb.Resolvers.Auth
 
   def paginate(args, _resolution) do
@@ -27,19 +28,22 @@ defmodule MP3PamWeb.Resolvers.User do
     {:ok, paginated_users_with_avatar_url}
   end
 
-  def find(args, _resolution) do
-    {:ok, Repo.get(User, args.id)}
+  def me(_, %{context: %{current_user: user}}) do
+    artists_query =
+      from a in Artist,
+        where: a.user_id == ^user.id,
+        order_by: [asc: :stage_name]
+
+    artists_by_stage_name = Repo.all(artists_query)
+
+    {:ok, %{user | artists: artists_by_stage_name}}
   end
 
-  def me(_, %{context: %{current_user: user}}) do
-    {:ok, user}
+  def me(_, _) do
+    {:error, message: "You Need to login", code: 403}
   end
 
   def login(%{email: email, password: password}, _resolution) do
-    with {:ok, %User{} = user} <- Auth.login(email, password),
-         {:ok, jwt, _} <- MP3Pam.Guardian.encode_and_sign(user),
-         {:ok, _} <- User.store_token(user, jwt) do
-      {:ok, %{token: jwt}}
-    end
+    Auth.login(email, password)
   end
 end

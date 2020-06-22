@@ -47,7 +47,6 @@ defmodule MP3Pam.MixProject do
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
-      {:guardian, "~> 2.0"},
       {:absinthe, "~> 1.5", override: true},
       {:absinthe_phoenix, "~> 2.0"},
       {:absinthe_plug, "~> 1.5"},
@@ -62,7 +61,8 @@ defmodule MP3Pam.MixProject do
       {:slugger, "~> 0.3.0"},
       {:scrivener_ecto, "~> 2.0"},
       {:cors_plug, "~> 2.0"},
-      {:size, "~> 0.1.0"}
+      {:size, "~> 0.1.0"},
+      {:credo, "~> 1.4", only: [:dev, :test], runtime: false}
     ]
   end
 

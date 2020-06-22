@@ -25,7 +25,6 @@ defmodule MP3Pam.Models.User do
     field :first_login, :boolean, default: true
     field :img_bucket, :string
     field :avatar_url, :string, virtual: true
-    field :token, :string
 
     timestamps()
 
@@ -63,20 +62,6 @@ defmodule MP3Pam.Models.User do
 
   def get_user!(id) do
     Repo.get!(__MODULE__, id)
-  end
-
-  def store_token(user, token) do
-    user =
-      user
-      |> change(%{token: token})
-      |> Repo.update!()
-
-    {:ok, user}
-  end
-
-  def revoke_token(user, token) do
-    user
-    |> store_token(token)
   end
 
   def random do

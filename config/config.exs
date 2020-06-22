@@ -38,10 +38,9 @@ config :ex_aws,
     # bucket:
   ]
 
-config :mp3pam, MP3Pam.Guardian,
-  issuer: "MP3Pam",
-  ttl: {365, :days},
-  secret_key: "UB6epD5TiuYqxwwGvEB38DoVlWeVuZ/nkXPDyNvafGSdaN1hiCuFfspHii0S2lLE"
+config :mp3pam,
+  auth_salt: "qr0k5WcsL2+XO2g44Wf135AA2EB7QWZVm7TTcbmUiewIkCa9V408YselnPunPMNo",
+  auth_max_age: 24 * 60 * 60
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

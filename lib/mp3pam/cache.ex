@@ -26,16 +26,14 @@ defmodule MP3Pam.Cache do
   def get(key, default \\ nil) do
     case GenServer.call(__MODULE__, {:get, key}) do
       nil ->
-        cond do
-          is_function(default) ->
-            data = default.()
+        if is_function(default) do
+          data = default.()
 
-            put(key, data)
+          put(key, data)
 
-            data
-
-          true ->
-            default
+          data
+        else
+          default
         end
 
       data ->

@@ -9,14 +9,6 @@ defmodule MP3PamWeb.Resolvers.Utils do
   alias MP3Pam.Models.Playlist
   import MP3Pam.Helper
 
-  def all(_parent, _args, _resolution) do
-    {:ok, Repo.all(Track)}
-  end
-
-  def find(_parent, args, _resolution) do
-    {:ok, Repo.get(Track, args.id)}
-  end
-
   def upload_url(
         %{
           input: %{
@@ -33,7 +25,7 @@ defmodule MP3PamWeb.Resolvers.Utils do
     public = args[:public] || false
     attachment = args[:attachment] || false
 
-    filePath = make_upload_file_path(name)
+    file_path = make_upload_file_path(name)
 
     query_params =
       []
@@ -45,7 +37,7 @@ defmodule MP3PamWeb.Resolvers.Utils do
       |> ExAws.S3.presigned_url(
         :put,
         bucket,
-        filePath,
+        file_path,
         expires_in: 10 * 60 * 60,
         query_params: query_params
       )
@@ -53,7 +45,7 @@ defmodule MP3PamWeb.Resolvers.Utils do
     {:ok,
      %{
        signed_url: url,
-       filename: filePath
+       filename: file_path
      }}
   end
 

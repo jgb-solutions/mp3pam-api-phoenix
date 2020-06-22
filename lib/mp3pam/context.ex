@@ -24,12 +24,21 @@ defmodule MP3Pam.Context do
   end
 
   defp authorize(token) do
-    User
-    |> where(token: ^token)
-    |> Repo.one()
-    |> case do
-      nil -> {:error, "invalid authorization token"}
-      user -> {:ok, user}
+    salt = Application.fetch_env!(:mp3pam, :auth_salt)
+    max_age = Application.fetch_env!(:mp3pam, :auth_max_age)
+
+    case Phoenix.Token.verify(MP3PamWeb.Endpoint, salt, token, max_age: max_age) do
+      {:ok, user_id} ->
+        case Repo.get!(User, user_id) do
+          nil ->
+            {:error, "The user for this token is either deleted or never existed on our servers."}
+
+          user ->
+            {:ok, user}
+        end
+
+      {:error, _} ->
+        {:error, "invalid authorization token"}
     end
   end
 end

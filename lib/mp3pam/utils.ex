@@ -1,12 +1,12 @@
 defmodule MP3Pam.Utils do
   alias MP3Pam.Repo
 
-  def getHash(struct) do
+  def get_hash(struct) do
     hash = Enum.random(100_000..999_999)
 
     case Repo.get_by(struct, hash: hash) do
       %struct{} ->
-        getHash(struct)
+        get_hash(struct)
 
       nil ->
         hash
