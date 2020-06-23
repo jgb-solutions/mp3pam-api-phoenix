@@ -42,6 +42,17 @@ config :mp3pam,
   auth_salt: "qr0k5WcsL2+XO2g44Wf135AA2EB7QWZVm7TTcbmUiewIkCa9V408YselnPunPMNo",
   auth_max_age: 24 * 60 * 60
 
+config :ueberauth, Ueberauth,
+  providers: [
+    facebook: {Ueberauth.Strategy.Facebook, []}
+  ]
+
+config :ueberauth, Ueberauth.Strategy.Facebook.OAuth,
+  # System.get_env("FACEBOOK_CLIENT_ID"),
+  client_id: "577118013210445",
+  # System.get_env("FACEBOOK_CLIENT_SECRET")
+  client_secret: "19fc8c84d5ad473c8d43beaa4a9ee649"
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env()}.exs"

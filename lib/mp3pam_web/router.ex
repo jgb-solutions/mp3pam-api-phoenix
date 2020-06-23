@@ -41,6 +41,13 @@ defmodule MP3PamWeb.Router do
     # end
   end
 
+  scope "/auth", MP3PamWeb do
+    pipe_through :browser
+
+    get "/:provider", AuthController, :request
+    get "/:provider/callback", AuthController, :callback
+  end
+
   # Enables LiveDashboard only for development
   #
   # If you want to use the LiveDashboard in production, you should put

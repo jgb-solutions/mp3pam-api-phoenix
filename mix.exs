@@ -20,7 +20,7 @@ defmodule MP3Pam.MixProject do
   def application do
     [
       mod: {MP3Pam.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :ueberauth_facebook]
     ]
   end
 
@@ -62,7 +62,9 @@ defmodule MP3Pam.MixProject do
       {:scrivener_ecto, "~> 2.0"},
       {:cors_plug, "~> 2.0"},
       {:size, "~> 0.1.0"},
-      {:credo, "~> 1.4", only: [:dev, :test], runtime: false}
+      {:credo, "~> 1.4", only: [:dev, :test], runtime: false},
+      {:ueberauth, "~> 0.6"},
+      {:ueberauth_facebook, "~> 0.8"}
     ]
   end
 

@@ -36,7 +36,20 @@ defmodule MP3Pam.Models.User do
 
   def changeset(%__MODULE__{} = user, attrs) do
     user
-    |> cast(attrs, [:name, :email, :password, :telephone])
+    |> cast(attrs, [
+      :name,
+      :email,
+      :password,
+      :telephone,
+      :facebook_link,
+      :fb_avatar,
+      :avatar,
+      :facebook_id,
+      :admin,
+      :active,
+      :first_login,
+      :img_bucket
+    ])
     |> validate_required([:name, :email, :password])
     |> unsafe_validate_unique(:email, Repo)
     # |> validate_length(:name, min: 3, max: 10)
