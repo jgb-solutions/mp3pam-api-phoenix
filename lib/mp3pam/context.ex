@@ -2,10 +2,9 @@ defmodule MP3Pam.Context do
   @behaviour Plug
 
   import Plug.Conn
-  import Ecto.Query, only: [where: 2]
 
-  alias MP3Pam.Models.User
   alias MP3Pam.Repo
+  alias MP3Pam.Models.User
 
   def init(opts), do: opts
 

@@ -5,7 +5,7 @@ defmodule MP3PamWeb.AuthController do
   require Logger
   require Poison
 
-  alias Ueberauth.Strategy.Helpers
+  # alias Ueberauth.Strategy.Helpers
   alias Ueberauth.Auth
 
   import Ecto.Query
@@ -56,11 +56,6 @@ defmodule MP3PamWeb.AuthController do
     end
   end
 
-  # def request(conn, _params) do
-  #   # render(conn, "request.html", callback_url: Helpers.callback_url(conn))
-  #   IO.puts("yeah" <> Helpers.request_url(conn))
-  # end
-
   def delete(conn, _params) do
     conn
     |> put_flash(:info, "You have been logged out!")
@@ -71,26 +66,10 @@ defmodule MP3PamWeb.AuthController do
   def callback(%{assigns: %{ueberauth_failure: _fails}} = conn, _params) do
     json_response = Jason.encode!(%{error: true})
 
-    redirect(conn, external: "http://localhost:3000/auth/login?response=" <> json_response)
+    redirect(conn, external: "http://localhost:3000/auth/facebook?response=" <> json_response)
   end
 
   def callback(%{assigns: %{ueberauth_auth: auth}} = conn, _params) do
-    IO.inspect(auth)
-
-    # case find_or_create(auth) do
-    #   {:ok, user} ->
-    #     conn
-    #     |> put_flash(:info, "Successfully authenticated.")
-    #     |> put_session(:current_user, user)
-    #     |> configure_session(renew: true)
-    #     |> redirect(to: "/")
-
-    #   {:error, reason} ->
-    #     conn
-    #     |> put_flash(:error, reason)
-    #     |> redirect(to: "/")
-    # end
-
     fb_user = basic_info(auth)
 
     user_query =
@@ -99,37 +78,38 @@ defmodule MP3PamWeb.AuthController do
         or_where: u.email == ^fb_user.email,
         limit: 1
 
-    user = Repo.one(user_query)
+    new_or_updated_user =
+      case Repo.one(user_query) do
+        nil ->
+          userStruct = %User{
+            facebook_id: fb_user.id,
+            name: fb_user.name,
+            email: fb_user.email,
+            fb_avatar: fb_user.avatar,
+            facebook_link: fb_user.profile_url
+          }
 
-    IO.inspect(user)
+          Repo.insert!(userStruct)
 
-    if user do
-      updated_user =
-        with !(is_nil(user.avatar) && is_nil(user.fb_avatar)) do
-          change(user, fb_avatar: fb_user.avatar)
-        end
+        user ->
+          cond do
+            !(is_nil(user.avatar) && is_nil(user.fb_avatar)) ->
+              {:ok, user} = Repo.update(change(user, fb_avatar: fb_user.avatar))
+              user
 
-      Repo.update(updated_user)
-    else
-      user = %User{
-        facebook_id: fb_user.id,
-        name: fb_user.name,
-        email: fb_user.email,
-        fb_avatar: fb_user.avatar,
-        facebook_link: fb_user.profile_url
-      }
-
-      Repo.insert!(user)
-    end
+            true ->
+              user
+          end
+      end
 
     token =
       Phoenix.Token.sign(
         MP3PamWeb.Endpoint,
         Application.fetch_env!(:mp3pam, :auth_salt),
-        user.id
+        new_or_updated_user.id
       )
 
-    user_with_avatar_url = user |> User.with_avatar_url()
+    user_with_avatar_url = new_or_updated_user |> User.with_avatar_url()
 
     response = %{
       data: %{
@@ -144,8 +124,8 @@ defmodule MP3PamWeb.AuthController do
       token: token
     }
 
-    if user.first_login do
-      updated_user = change(user, first_login: false)
+    if new_or_updated_user.first_login do
+      updated_user = change(new_or_updated_user, first_login: false)
 
       Repo.update(updated_user)
     end
